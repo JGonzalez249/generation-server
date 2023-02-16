@@ -24,11 +24,11 @@ function draw() {
   [100, 100],
   [150, 100],
   [150, 0],
-  [0, 
+  [0, 0]
 ]`
 try {
   eval(chatGPTInput)
-  
+
 } catch (error) {
     text(error, 50, 10);
     console.log(error)
