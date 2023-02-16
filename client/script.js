@@ -28,7 +28,7 @@ function draw() {
 ]`
 try {
   eval(chatGPTInput)
-
+  
 } catch (error) {
     text(error, 50, 10);
     console.log(error)
