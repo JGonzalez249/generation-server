@@ -31,6 +31,7 @@ try {
 
 } catch (error) {
     text(error, 50, 10);
+    console.log(error)
 }
   // console.log(points)
   beginShape();
