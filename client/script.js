@@ -15,7 +15,7 @@ function draw() {
   background(255);
   stroke(0)
   let points = []
-  let chatGPTInput = `points = [
+  points = JSON.parse(`[
   [0, 0],
   [0, 100],
   [50, 100],
@@ -25,14 +25,8 @@ function draw() {
   [150, 100],
   [150, 0],
   [0, 0]
-]`
-try {
-  eval(chatGPTInput)
+]`)
 
-} catch (error) {
-    text(error, 50, 10);
-    console.log(error)
-}
   // console.log(points)
   beginShape();
   for(let i of points) {
