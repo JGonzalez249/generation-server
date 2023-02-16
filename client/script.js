@@ -12,7 +12,8 @@ function setup() {
 function draw() {
   background(255);
   stroke(0)
-  let chatGPTInput = `[
+  let points = []
+  let chatGPTInput = `points = [
   [0, 0],
   [0, 100],
   [50, 100],
@@ -23,7 +24,7 @@ function draw() {
   [150, 0],
   [0, 0]
 ]`
-  let points = eval(chatGPTInputs)
+  eval(chatGPTInputs)
   beginShape();
   for(let i of points) {
     vertex(i[0], i[1])
