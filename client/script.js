@@ -25,6 +25,7 @@ function draw() {
   [0, 0]
 ]`
   eval(chatGPTInputs)
+  console.log(points)
   beginShape();
   for(let i of points) {
     vertex(i[0], i[1])
