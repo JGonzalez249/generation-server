@@ -30,7 +30,7 @@ try {
   eval(chatGPTInput)
 
 } catch (error) {
-  text(error)
+    text(error, 50, 10);
 }
   // console.log(points)
   beginShape();
