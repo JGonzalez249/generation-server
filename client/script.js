@@ -22,7 +22,12 @@ function setup() {
 
 function draw() {
   background(255);
-  
+  beginShape();
+  for(let i of points) {
+    vertex(points[i][0])
+    vertex(points[i][1])
+  }
+  endShape
   let displayString = "";
   let words = inputString.split(" ");
   let currentLine = "";
