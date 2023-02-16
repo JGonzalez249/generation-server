@@ -2,17 +2,6 @@ let inputString = "";
 let index = 0;
 let delay = 100;
 
-let points = [
-  [0, 0],
-  [0, 100],
-  [50, 100],
-  [50, 50],
-  [100, 50],
-  [100, 100],
-  [150, 100],
-  [150, 0],
-  [0, 0]
-];
 
 function setup() {
   createCanvas(400, 400);
@@ -27,6 +16,7 @@ function draw() {
   for(let i of points) {
     vertex(i[0], i[1])
   }
+  
   endShape(CLOSE)
   let displayString = "";
   let words = inputString.split(" ");
