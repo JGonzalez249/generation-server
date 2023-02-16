@@ -10,7 +10,7 @@ const openai = new OpenAIApi(configuration);
 console.log(process.argv)
 const response = await openai.createCompletion({
   model: "text-davinci-003",
-  prompt: process.argv[3],
+  prompt: process.argv[2],
   max_tokens: 100,
   temperature: 0,
 });
