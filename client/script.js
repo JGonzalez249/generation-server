@@ -24,7 +24,7 @@ function draw() {
   [150, 0],
   [0, 0]
 ]`
-  eval(chatGPTInputs)
+  eval(chatGPTInput)
   console.log(points)
   beginShape();
   for(let i of points) {
