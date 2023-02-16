@@ -27,7 +27,7 @@ function draw() {
     vertex(points[i][0])
     vertex(points[i][1])
   }
-  endShape
+  endShape(CLOSE)
   let displayString = "";
   let words = inputString.split(" ");
   let currentLine = "";
