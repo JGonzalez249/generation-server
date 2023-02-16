@@ -3,7 +3,7 @@ import {config} from 'dotenv';
 config()
 
 const configuration = new Configuration({
-    organization: "org-HgBUl1nua3IBuDMkH8dYQLZJ",
+    // organization: "org-HgBUl1nua3IBuDMkH8dYQLZJ",
     apiKey: process.env.OPENAI_API_KEY,
 });
 const openai = new OpenAIApi(configuration);
