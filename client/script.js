@@ -22,7 +22,7 @@ function draw() {
   [100, 100],
   [150, 100],
   [150, 0],
-  [0, 0]
+  [0, 
 ]`
   eval(chatGPTInput)
   // console.log(points)
