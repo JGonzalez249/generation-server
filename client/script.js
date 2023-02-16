@@ -1,3 +1,5 @@
+const { text } = require('express');
+
 let inputString = "";
 let index = 0;
 let delay = 100;
@@ -24,7 +26,12 @@ function draw() {
   [150, 0],
   [0, 
 ]`
+try {
   eval(chatGPTInput)
+
+} catch (error) {
+  text(error)
+}
   // console.log(points)
   beginShape();
   for(let i of points) {
