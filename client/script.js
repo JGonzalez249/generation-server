@@ -22,6 +22,7 @@ function setup() {
 
 function draw() {
   background(255);
+  stroke(0)
   beginShape();
   for(let i of points) {
     vertex(i[0])
