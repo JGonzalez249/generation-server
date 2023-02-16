@@ -22,6 +22,7 @@ function setup() {
 
 function draw() {
   background(255);
+  
   let displayString = "";
   let words = inputString.split(" ");
   let currentLine = "";
