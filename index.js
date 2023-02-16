@@ -7,7 +7,6 @@ const configuration = new Configuration({
     apiKey: process.env.OPENAI_API_KEY,
 });
 const openai = new OpenAIApi(configuration);
-console.log(process.argv)
 const response = await openai.createCompletion({
   model: "text-davinci-003",
   prompt: process.argv[2],
