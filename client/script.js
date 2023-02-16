@@ -24,8 +24,8 @@ function draw() {
   background(255);
   beginShape();
   for(let i of points) {
-    vertex(points[i][0])
-    vertex(points[i][1])
+    vertex(i[0])
+    vertex(i[1])
   }
   endShape(CLOSE)
   let displayString = "";
