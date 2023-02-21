@@ -6,7 +6,7 @@ let delay = 100;
 
 
 function setup() {
-  createCanvas(400, 400);
+  createCanvas(windowWidth, windowHeight);
   textSize(32);
   getTextFromAPI();
 }
