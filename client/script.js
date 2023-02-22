@@ -1,63 +1,174 @@
 let inputText;
 let generateButton;
-
 let inputString = "";
 let index = 0;
 let delay = 100;
 let shapes = [];
 
 function setup() {
-  createCanvas(400, 400);
-  
+  createCanvas(windowWidth, windowHeight);
+
   inputText = createInput();
   inputText.position(20, 20);
-  
-  generateButton = createButton('Generate Word Cloud');
+
+  generateButton = createButton("Generate Word Cloud");
   generateButton.position(inputText.x + inputText.width + 10, 20);
   generateButton.mousePressed(generateWordCloud);
-  
+
   noStroke();
 }
 
 function draw() {
   background(255);
-  for (let i = 0; i < shapes.length; i++) {
-    shapes[i].display();
+
+  const clusterSize = 10;
+
+  for (let i = 0; i < shapes.length; i += clusterSize) {
+    const cluster = shapes.slice(i, i + clusterSize);
+
+    // Calculate the center of the cluster
+    let centerX = 0;
+    let centerY = 0;
+    for (let j = 0; j < cluster.length; j++) {
+      centerX += cluster[j].x;
+      centerY += cluster[j].y;
+    }
+    centerX /= cluster.length;
+    centerY /= cluster.length;
+
+    // Move the shapes towards the center of the cluster
+    for (let j = 0; j < cluster.length; j++) {
+      const shape = cluster[j];
+      const dx = centerX - shape.x;
+      const dy = centerY - shape.y;
+      const distance = sqrt(dx * dx + dy * dy);
+      const speed = map(distance, 0, width, 0.5, 0.1);
+      shape.x += dx * speed;
+      shape.y += dy * speed;
+
+      shape.display();
+    }
   }
 }
 
 class Shape {
-  constructor(x, y, size) {
+  constructor(x, y, size, word) {
     this.x = x;
     this.y = y;
     this.size = size;
-    this.color = color(random(255), random(255), random(255));
+    this.color = color(random(200, 255), random(200, 255), random(200, 255));
+    this.word = word;
   }
 
+  intersects(other) {
+    let d = dist(this.x, this.y, other.x, other.y);
+    return d < (this.size + other.size) / 2 + this.padding;
+  }
+
+  generateNewPosition() {
+    this.x = random(this.minX, this.maxX);
+    this.y = random(this.minY, this.maxY);
+  }
+  
+
   display() {
+    const sizeMultiplier = 1 + 0.1 * sin(frameCount / 10);
+    const size = this.size * sizeMultiplier;
+
     fill(this.color);
-    ellipse(this.x, this.y, this.size, this.size);
+    ellipse(this.x, this.y, size, size);
+  
+    textAlign(CENTER, CENTER);
+    textSize(size / 4);
+    fill(0);
+    text(this.word, this.x, this.y);
   }
 }
 
 async function generateWordCloud() {
   inputString = inputText.value();
   shapes = [];
-  
-  const response = await fetch("http://localhost:3000/generate", 
-  {method: "post", body: {text: inputString}});
-  
+
+  const response = await fetch("http://localhost:3000/generate", { method: "post", body: { text: inputString } });
   const data = await response.json();
-  inputString = data.text;
-  delay = Math.floor(Math.random() * 200) + 50;
-  let words = inputString.split(" ");
-  for (let i = 0; i < words.length; i++) {
-    let word = words[i];
-    if (word.length > 4) {
-      let x = random(width);
-      let y = random(height);
-      let size = word.length * 10;
-      shapes.push(new Shape(x, y, size));
+  const generatedText = data.text;
+
+  const tokens = generatedText.trim().split(" ");
+  const maxTokens = 100;
+  const numShapes = min(tokens.length, maxTokens);
+
+  const clusterSize = 10;
+  const clusterPadding = random(100, 200);
+
+  // Top-left cluster
+  for (let i = 0; i < clusterSize; i++) {
+    const word = tokens[i];
+    const x = random(0, width / 2 - clusterPadding);
+    const y = random(0, height / 2 - clusterPadding);
+    const size = map(word.length, 1, 10, 20, 200);
+    const shape = new Shape(x, y, size, word);
+    shapes.push(shape);
+  }
+
+  // Top-right cluster
+  for (let i = clusterSize; i < clusterSize * 2; i++) {
+    const word = tokens[i];
+    const x = random(width / 2 + clusterPadding, width);
+    const y = random(0, height / 2 - clusterPadding);
+    const size = map(word.length, 1, 10, 20, 200);
+    const shape = new Shape(x, y, size, word);
+    shapes.push(shape);
+  }
+
+  // Center cluster
+  for (let i = clusterSize * 2; i < clusterSize * 3; i++) {
+    const word = tokens[i];
+    const x = random(width / 4, width * 3 / 4);
+    const y = random(height / 4, height * 3 / 4);
+    const size = map(word.length, 1, 10, 20, 200);
+    const shape = new Shape(x, y, size, word);
+    shapes.push(shape);
+  }
+
+  // Bottom-left cluster
+  for (let i = clusterSize * 3; i < clusterSize * 4; i++) {
+    const word = tokens[i];
+    const x = random(0, width / 2 - clusterPadding);
+    const y = random(height / 2 + clusterPadding, height);
+    const size = map(word.length, 1, 10, 20, 200);
+    const shape = new Shape(x, y, size, word);
+    shapes.push(shape);
+  }
+
+  // Bottom-right cluster
+  for (let i = clusterSize * 4; i < clusterSize * 5; i++) {
+    const word = tokens[i];
+    const x = random(width / 2 + clusterPadding, width);
+    const y = random(height / 2 + clusterPadding, height);
+    const size = map(word.length, 1, 10, 20, 200);
+    const shape = new Shape(x, y, size, word);
+    shapes.push(shape);
+  }
+  const inputTokens = inputString.trim().split(" ");
+  for (let i = 0; i < inputTokens.length; i++) {
+    const word = inputTokens[i];
+    if (!tokens.includes(word)) {
+      let x, y, size;
+      let overlapping = true;
+      while (overlapping) {
+        x = random(width);
+        y = random(height);
+        size = map(word.length, 1, 10, 20, 200);
+        let testShape = new Shape(x, y, size, word);
+        overlapping = false;
+        for (let j = 0; j < shapes.length; j++) {
+          if (testShape.intersects(shapes[j], padding)) {
+            overlapping = true;
+            break;
+          }
+        }
+      }
+      shapes.push(new Shape(x, y, size, word));
     }
   }
 }
