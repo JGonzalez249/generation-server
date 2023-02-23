@@ -58,26 +58,25 @@ class Shape {
     this.size = size;
     this.color = color(random(200, 255), random(200, 255), random(200, 255));
     this.word = word;
+    this.rotation = random(TWO_PI); // Add a random rotation angle to the shape
   }
 
   intersects(other) {
     let d = dist(this.x, this.y, other.x, other.y);
-    return d < (this.size + other.size) / 2 + this.padding;
+    return d < (this.size + other.size) / 2;
   }
-
-  generateNewPosition() {
-    this.x = random(this.minX, this.maxX);
-    this.y = random(this.minY, this.maxY);
-  }
-  
 
   display() {
     const sizeMultiplier = 1 + 0.1 * sin(frameCount / 10);
     const size = this.size * sizeMultiplier;
 
     fill(this.color);
-    ellipse(this.x, this.y, size, size);
-  
+    push(); // Save the current transformation matrix
+    translate(this.x, this.y); // Move the origin to the center of the shape
+    rotate(this.rotation); // Rotate the shape by the random angle
+    ellipse(0, 0, size, size); // Draw the shape centered at the origin
+    pop(); // Restore the previous transformation matrix
+
     textAlign(CENTER, CENTER);
     textSize(size / 4);
     fill(0);
@@ -100,55 +99,76 @@ async function generateWordCloud() {
   const clusterSize = 10;
   const clusterPadding = random(100, 200);
 
-  // Top-left cluster
-  for (let i = 0; i < clusterSize; i++) {
-    const word = tokens[i];
-    const x = random(0, width / 2 - clusterPadding);
-    const y = random(0, height / 2 - clusterPadding);
-    const size = map(word.length, 1, 10, 20, 200);
-    const shape = new Shape(x, y, size, word);
-    shapes.push(shape);
-  }
+// Top-left cluster
+for (let i = clusterSize; i < numShapes; i++) {
+  const word = tokens[i];
+  const centerX = random(0, width / 2 - clusterPadding);
+  const centerY = random(0, height / 2 - clusterPadding);
+  const r = random(0, 500);
+  const angle = random(0, TWO_PI);
+  const x = centerX + r * cos(angle);
+  const y = centerY + r * sin(angle);
+  const size = map(word.length, 1, 10, 20, 200);
+  const shape = new Shape(x, y, size, word);
+  shapes.push(shape);
+}
 
-  // Top-right cluster
-  for (let i = clusterSize; i < clusterSize * 2; i++) {
-    const word = tokens[i];
-    const x = random(width / 2 + clusterPadding, width);
-    const y = random(0, height / 2 - clusterPadding);
-    const size = map(word.length, 1, 10, 20, 200);
-    const shape = new Shape(x, y, size, word);
-    shapes.push(shape);
-  }
+// Top-right cluster
+for (let i = clusterSize; i < numShapes * 2; i++) {
+  const word = tokens[i];
+  const centerX = random(width / 2 + clusterPadding, width);
+  const centerY = random(0, height / 2 - clusterPadding);
+  const r = random(0, 500);
+  const angle = random(0, TWO_PI);
+  const x = centerX + r * cos(angle);
+  const y = centerY + r * sin(angle);
+  const size = map(word.length, 1, 10, 20, 200);
+  const shape = new Shape(x, y, size, word);
+  shapes.push(shape);
+}
 
-  // Center cluster
-  for (let i = clusterSize * 2; i < clusterSize * 3; i++) {
-    const word = tokens[i];
-    const x = random(width / 4, width * 3 / 4);
-    const y = random(height / 4, height * 3 / 4);
-    const size = map(word.length, 1, 10, 20, 200);
-    const shape = new Shape(x, y, size, word);
-    shapes.push(shape);
-  }
+// Center cluster
+for (let i = clusterSize * 2; i < numShapes * 3; i++) {
+  const word = tokens[i];
+  const centerX = random(width / 4, width * 3 / 4);
+  const centerY = random(height / 4, height * 3 / 4);
+  const r = random(0, 500);
+  const angle = random(0, TWO_PI);
+  const x = centerX + r * cos(angle);
+  const y = centerY + r * sin(angle);
+  const size = map(word.length, 1, 10, 20, 200);
+  const shape = new Shape(x, y, size, word);
+  shapes.push(shape);
+}
 
-  // Bottom-left cluster
-  for (let i = clusterSize * 3; i < clusterSize * 4; i++) {
-    const word = tokens[i];
-    const x = random(0, width / 2 - clusterPadding);
-    const y = random(height / 2 + clusterPadding, height);
-    const size = map(word.length, 1, 10, 20, 200);
-    const shape = new Shape(x, y, size, word);
-    shapes.push(shape);
-  }
+// Bottom-left cluster
+for (let i = clusterSize * 3; i < numShapes * 4; i++) {
+  const word = tokens[i];
+  const centerX = random(0, width / 2 - clusterPadding);
+  const centerY = random(height / 2 + clusterPadding, height);
+  const r = random(0, 500);
+  const angle = random(0, TWO_PI);
+  const x = centerX + r * cos(angle);
+  const y = centerY + r * sin(angle);
+  const size = map(word.length, 1, 10, 20, 200);
+  const shape = new Shape(x, y, size, word);
+  shapes.push(shape);
+}
 
-  // Bottom-right cluster
-  for (let i = clusterSize * 4; i < clusterSize * 5; i++) {
-    const word = tokens[i];
-    const x = random(width / 2 + clusterPadding, width);
-    const y = random(height / 2 + clusterPadding, height);
-    const size = map(word.length, 1, 10, 20, 200);
-    const shape = new Shape(x, y, size, word);
-    shapes.push(shape);
-  }
+// Bottom-right cluster
+for (let i = clusterSize * 4; i < numShapes * 5; i++) {
+  const word = tokens[i];
+  const centerX = random(width / 2 + clusterPadding, width);
+  const centerY = random(height / 2 + clusterPadding, height);
+  const r = random(0, 500);
+  const angle = random(0, TWO_PI);
+  const x = centerX + r * cos(angle);
+  const y = centerY + r * sin(angle);
+  const size = map(word.length, 1, 10, 20, 200);
+  const shape = new Shape(x, y, size, word);
+  shapes.push(shape);
+}
+
   const inputTokens = inputString.trim().split(" ");
   for (let i = 0; i < inputTokens.length; i++) {
     const word = inputTokens[i];
