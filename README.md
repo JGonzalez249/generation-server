@@ -1,3 +1,6 @@
+# What have I done?
+Using GPT-3 and p5js, I made a script that will allow the user to generate a word cloud with the shapes and the generated text to spawn on the canvas in clusters. Within these clusters, the shapes and the text animate as if they are enlarging and shrinking every frame. This is a very simple use of the GPT-3 and the p5js library. Currently, the script has bugs and is not working as intended.
+
 # Try Out Development Containers: Node.js
 
 [![Open in Dev Containers](https://img.shields.io/static/v1?label=Dev%20Containers&message=Open&color=blue&logo=visualstudiocode)](https://vscode.dev/redirect?url=vscode://ms-vscode-remote.remote-containers/cloneInVolume?url=https://github.com/microsoft/vscode-remote-try-node)
